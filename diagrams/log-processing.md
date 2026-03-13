@@ -3,38 +3,42 @@
 ## 圖 1：系統流程與角色關係
 
 ```mermaid
+%%{init: {'flowchart': {'rankSpacing': 35, 'nodeSpacing': 12}}}%%
 flowchart LR
-    subgraph ext["外部系統"]
+    subgraph ext[" "]
         direction TB
-        Syslogng(["⚙️ SYSLOGNG"])
+        extLabel["**外部系統**"]:::zoneLabel
+        Syslogng(["**⚙️ SYSLOGNG**"])
     end
 
     subgraph MPBox["🖥️ MP-Box"]
         direction TB
         A["📥 匯入日誌"]
-        C["📦 批次切割<br/>每 10 分鐘 共 60 批/天"]
-        D["⚡ Gemini Flash<br/>每批產出 JSON（60 個/天）"]
-        E["🧠 Gemini Pro<br/>整合 60 個 JSON → SecurityIssue 清單"]
-        F["🤖 資安專家<br/>Issue 清單 ／ 建議處理方法 ／ 處置日誌"]
+        C["📦 每 10 分鐘批次處理<br/>共 60 批/天"]
+        D["**⚡ Gemini Flash**<br/>每批產出 JSON（60 個/天）"]
+        E["**🧠 Gemini Pro**<br/>整合 60 個 JSON<br/>產出異常問題清單"]
+        F["**🤖 資安專家**<br/>異常問題清單 ／ 建議處理方法<br/>處置日誌 ／ 權限指派"]
         M["⚙️ 系統管理<br/>帳號 ／ 角色 ／ AI 夥伴"]
 
         A -->|~31,000 筆 / 10 分| C
         C --> D --> E --> F
     end
 
-    subgraph ppl["公司人員"]
+    subgraph ppl[" "]
         direction TB
+        pplLabel["**公司人員**"]:::zoneLabel
         SysAdmin(["👤 系統管理員"])
         SecDept(["👤 資安部門人員"])
     end
 
-    Syslogng -->|"篩選後自動推送（每 10 分）"| A
-    SysAdmin -->|"CSV 上傳（預處理篩選後匯入）"| A
+    Syslogng -->|篩選後自動推送（每 10 分）| A
+    SysAdmin -->|CSV 上傳（預處理篩選後匯入）| A
     SysAdmin -->|設定管理| M
-    SecDept -->|"查詢 Issue ／ 更新狀態<br/>查看建議 ／ 處置日誌 ／ 諮詢"| F
+    SecDept -->|查詢 ／ 更新狀態 ／ 諮詢| F
 
     style ext fill:transparent,stroke:transparent
     style ppl fill:transparent,stroke:transparent
+    classDef zoneLabel fill:none,stroke:none,font-weight:bold,font-size:15px
 ```
 
 ---
