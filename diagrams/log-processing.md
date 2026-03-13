@@ -4,28 +4,34 @@
 
 ```mermaid
 flowchart LR
-    SysAdmin(["👤 系統管理員"])
-    SecAnalyst(["👤 資安分析師"])
+    subgraph 外部["外部系統／工具"]
+        direction TB
+        Syslogng(["⚙️ SYSLOGNG<br/>每 10 分鐘自動推送"])
+    end
 
-    A["🖧 SYSLOGNG<br/>每日 09:00–19:00<br/>~180萬筆 / 3.5 GB"]
-    B["🔍 Filter 篩選引擎<br/>規則型事件過濾"]
-    C["📦 批次切割<br/>每 10 分鐘一批<br/>共 60 批/天"]
-    D["⚡ Gemini Flash<br/>每批產出 JSON<br/>60 個/天"]
-    E["🧠 Gemini Pro<br/>整合 60 個 JSON<br/>產出異常清單"]
-    F["📋 SecurityIssue 清單<br/>MITRE ATT&CK + 建議步驟"]
-    G["🖥️ 資安監控平台<br/>Dashboard"]
+    subgraph MPBox["🖥️ MP-Box"]
+        direction TB
+        A["📥 匯入日誌"]
+        B["🔍 Filter 篩選引擎<br/>規則型事件過濾"]
+        C["📦 批次切割<br/>每 10 分鐘 共 60 批/天"]
+        D["⚡ Gemini Flash<br/>每批產出 JSON（60 個/天）"]
+        E["🧠 Gemini Pro<br/>整合 60 個 JSON"]
+        F["📋 SecurityIssue 清單<br/>MITRE ATT&CK + 建議步驟"]
 
-    A -->|每 10 分鐘約 31,000 筆| B
-    B --> C
-    C --> D
-    D --> E
-    E --> F
-    F --> G
+        A -->|~31,000 筆 / 10 分| B
+        B --> C --> D --> E --> F
+    end
 
-    SysAdmin -->|匯入日誌| A
+    subgraph 公司["公司人員"]
+        direction TB
+        SysAdmin(["👤 系統管理員"])
+        SecAnalyst(["👤 資安專家"])
+    end
+
+    Syslogng -->|syslog 自動匯入| A
+    SysAdmin -->|CSV 手動上傳| A
     SysAdmin -->|管理篩選規則| B
     SecAnalyst -->|查詢 Issue / 更新狀態<br/>查看 MITRE + 建議| F
-    SecAnalyst -->|監控| G
 ```
 
 ---
