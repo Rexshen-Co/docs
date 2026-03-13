@@ -1,4 +1,4 @@
-# LOG 處理流程圖與 JSON Schema
+# LOG 處理流程圖
 
 ## 圖 1：系統流程與角色關係
 
@@ -49,25 +49,7 @@ flowchart LR
     classDef v2Style fill:#f0fdf4,stroke:#22c55e,stroke-width:1.5px,color:#166534
 ```
 
----
 
-### SuggestUrgency 值域
-
-| 值 | 說明 |
-|---|---|
-| `立即` | 需立刻處理，風險極高 |
-| `今日` | 今天內完成處理 |
-| `24小時內` | 24 小時內完成 |
-| `本週` | 本週內完成即可 |
-
-### CurrentStatus 值域
-
-| 值 | 說明 |
-|---|---|
-| `待處理` | 尚未開始處理 |
-| `處理中` | 已指派，正在處理 |
-
----
 
 ### JSON 範例（單筆 SecurityIssue）
 
